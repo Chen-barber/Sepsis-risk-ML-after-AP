@@ -1,42 +1,45 @@
-# Sepsis risk modelling after aspiration pneumonia
+# Sepsis-3 risk calculator
 
-Public code deposit for the reported analysis and the interactive risk calculator.
+Local Shiny web calculator for the reported GAMBoost model.
 
-## Contents
+Enter the seven consensus features to obtain an individualized Sepsis-3 probability. The app shows KernelSHAP waterfall and force plots and can download a one-page result PDF.
 
-- `split_mimic_clean.R` — stratified 7:3 split of the imputed MIMIC analysis set (seed 341)
-- `ml_mimic_clean.R` — seven classifiers with fixed hyperparameters (seed 123)
-- `shiny/` — local web calculator (GAMBoost probability + SHAP waterfall/force plots)
-- `requirements.txt` / `requirements-R.txt` — software versions
-- `LICENSE` — MIT Licence
+## Manuscript wording
 
-Patient-level data are not included.
+To facilitate practical implementation, we developed a web-based risk calculator (available at: https://github.com/Chen-barber/Sepsis-risk-ML-after-aspiration-pneumonia/tree/web-calculator). This user-friendly application not only generates individualized sepsis risk probabilities based on the seven variables but also provides real-time local interpretability through integrated SHAP waterfall and force plots, supporting transparent clinical decision-making.
 
-## Web calculator
-
-Branch `web-calculator` (and the `shiny/` folder on this repository):
-
-https://github.com/Chen-barber/Sepsis-risk-ML-after-aspiration-pneumonia/tree/web-calculator
-
-Suggested manuscript text:
-
-> To facilitate practical implementation, we developed a web-based risk calculator (available at: https://github.com/Chen-barber/Sepsis-risk-ML-after-aspiration-pneumonia/tree/web-calculator). This user-friendly application not only generates individualized sepsis risk probabilities based on the seven variables but also provides real-time local interpretability through integrated SHAP waterfall and force plots, supporting transparent clinical decision-making.
-
-Run locally:
+## Run
 
 ```text
 cd shiny
 Rscript --vanilla run_app.R
 ```
 
-The console prints a local URL (default `http://127.0.0.1:8080`).
+Default local URL: `http://127.0.0.1:8080` (override with environment variables `SHINY_HOST` and `SHINY_PORT`).
 
-## Data access
+## Dependencies
 
-MIMIC-IV is obtained from PhysioNet after credentialing. Access MIMIC-IV at https://physionet.org/content/mimiciv/ under the PhysioNet Credentialed Health Data Use Agreement. Do not redistribute MIMIC-derived tables via this repository. The external institutional cohort is available only under local ethics approval and may be requested from the corresponding author.
+Install once:
 
-## Environment
+```r
+install.packages(c(
+  "shiny", "bslib", "mboost", "kernelshap", "shapviz",
+  "ggplot2", "patchwork"
+))
+```
 
-Computing environment: R 4.6.0 and Python 3.14.5. Package versions are listed in `requirements-R.txt` and `requirements.txt`.
+## Input features
 
-Please cite the published article when available and acknowledge PhysioNet and MIMIC-IV.
+- 24-h blood urea nitrogen (mmol/L)
+- 24-h calcium (mmol/L)
+- 24-h chloride (mmol/L)
+- Mechanical ventilation (0/1)
+- Norepinephrine use (0/1)
+- 24-h platelet count (x10^9/L)
+- 24-h systolic blood pressure (mmHg)
+
+Threshold options: training-set Youden cut-off (default) or fixed 0.50.
+
+## Privacy
+
+`shiny.Rdata` contains the fitted GAMBoost object and an anonymous background matrix of seven clinical features for KernelSHAP. No patient identifiers are included.
