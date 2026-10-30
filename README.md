@@ -1,4 +1,4 @@
-# Sepsis-risk-ML-after-AP
+# Sepsis risk modelling after aspiration pneumonia
 
 Public code deposit for the reported analysis and the interactive risk calculator.
 

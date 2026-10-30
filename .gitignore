@@ -1,0 +1,11 @@
+.Rhistory
+.RData
+.Rproj.user
+*.rds
+data_clean/
+data_sets/
+data_ml_clean/
+.DS_Store
+*.html
+rsconnect/
+.Ruserdata
